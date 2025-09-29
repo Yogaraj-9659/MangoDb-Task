@@ -20,6 +20,27 @@ db.topics.aggregate([
   }
 ])
 
+RESPONSE:
+[
+  {
+    "topic_id": 101,
+    "topic": "MongoDB Basics",
+    "date": "2020-10-10",
+    "related_tasks": [
+      { "task_id": 201, "topic_id": 101, "user_id": 1, "task": "Create collections", "submitted": true }
+    ]
+  },
+  {
+    "topic_id": 102,
+    "topic": "Aggregation",
+    "date": "2020-10-25",
+    "related_tasks": [
+      { "task_id": 202, "topic_id": 102, "user_id": 2, "task": "Write aggregation", "submitted": false }
+    ]
+  }
+]
+
+
 2.Find all the company drives which appeared between 15 oct-2020 and 31-oct-2020.
 db.company_drives.find({
   drive_date: {
@@ -27,6 +48,12 @@ db.company_drives.find({
     $lte: ISODate("2020-10-31")
   }
 })
+RESPONSE:
+[
+  { "drive_id": 301, "company": "Google", "drive_date": "2020-10-20", "student_ids": [1] },
+  { "drive_id": 302, "company": "Amazon", "drive_date": "2020-10-28", "student_ids": [2] }
+]
+
 
 3.Find all the company drives and students who are appeared for the placement.
 db.company_drives.aggregate([
@@ -39,6 +66,27 @@ db.company_drives.aggregate([
     }
   }
 ])
+RESPONSE:
+[
+  {
+    "drive_id": 301,
+    "company": "Google",
+    "drive_date": "2020-10-20",
+    "student_ids": [1],
+    "appeared_students": [
+      { "user_id": 1, "name": "Arun", "email": "arun@gmail.com", "batch": "FSD_01" }
+    ]
+  },
+  {
+    "drive_id": 302,
+    "company": "Amazon",
+    "drive_date": "2020-10-28",
+    "student_ids": [2],
+    "appeared_students": [
+      { "user_id": 2, "name": "Divya", "email": "divya@gmail.com", "batch": "FSD_01" }
+    ]
+  }
+]
 
 4.Find the number of problems solved by the user in codekata.
 db.codekata.aggregate([
@@ -49,11 +97,20 @@ db.codekata.aggregate([
     }
   }
 ])
+RESPONSE:
+[
+  { "_id": 1, "total_problems_solved": 55 },
+  { "_id": 2, "total_problems_solved": 42 }
+]
 
 5.Find all the mentors with who has the mentee's count more than 15.
 db.mentors.find({
   mentee_count: { $gt: 15 }
 })
+RESPONSE:
+[
+  { "mentor_id": 401, "name": "Ravi", "mentee_count": 20 }
+]
 
 6.Find the number of users who are absent and task is not submitted  between 15 oct-2020 and 31-oct-2020.
 db.attendance.aggregate([
@@ -80,3 +137,8 @@ db.attendance.aggregate([
     $count: "absent_and_not_submitted"
   }
 ])
+RESPONSE:
+[
+  { "absent_and_not_submitted": 1 }
+]
+
